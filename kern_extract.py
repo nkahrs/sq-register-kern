@@ -28,6 +28,40 @@ def stripbars(kern, howmany):
 
 
 # now, we have to actually get useful data from this format
+
+# define pitch class -> integer reference
+pitchclassreference = {'c': 0, 'c-': 11, 'c#': 1, 'd': 2, 'd-': 1, 'd#': 3,
+                       'e': 4, 'e-': 3, 'e#': 5, 'f': 5, 'f-': 4, 'f#': 6,
+                       'g': 7, 'g-': 6, 'g#': 8, 'a': 9, 'a-': 8, 'a#': 10,
+                       'b': 11, 'b-': 10, 'b#': 0}
+# pitchclass: String -> Int (integer notation, C = 0)
+def pitchclass(name):
+    try:
+        return pitchclassreference[name.lower()]
+    except:
+        raise ValueError('pitchclass: invalid note name')
+
+# pitch: String -> Int (MIDI notation, C4 = 60)
+def pitch(name):
+    # check for accidentals, standardize name
+    finalshift = 0
+    if name[-1] == '-':
+        name = name[0:-1]
+        finalshift = -1
+    elif name[-1] == '#':
+        name = name[0:-1]
+        finalshift = 1
+
+    # calculate octave
+    if name.isupper():
+        octave = 4 - len(name)
+    elif name.islower():
+        octave = 3 + len(name)
+    else:
+        raise ValueError('pitch: invalid note name')
+
+    pc = pitchclass(name[0])+finalshift
+    return pc + (12*(octave+1))
         
         
 
