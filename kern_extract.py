@@ -15,7 +15,10 @@ def stripbars(kern, howmany):
         if line[0] == "!": # ignore comments
             continue
         else:
-            line = line.split('\t') # split by tabs
+            # be mindful of newlines at end
+            if line[-1] == '\n':
+                line = line[0:-1]
+            line = line.split() # split by tabs or spaces
             if line[0][0] == '*': # special start-of-staff lines
                 if line[0][-1] == ':': #encode key
                     key = line[0][1:-1]
@@ -43,6 +46,9 @@ def pitchclass(name):
 
 # pitch: String -> Int (MIDI notation, C4 = 60)
 def pitch(name):
+    # first, check for rest
+    if name == 'r':
+        return None
     # check for accidentals, standardize name
     finalshift = 0
     if name[-1] == '-':
@@ -62,8 +68,28 @@ def pitch(name):
 
     pc = pitchclass(name[0])+finalshift
     return pc + (12*(octave+1))
-        
-        
+
+# next: need something for line ([String]) to (Int, [Int]) as in (duration, [notes])
+
+# parse_kern_atom :: String -> (Int, String)
+# given something like "8gg", split into the two parts
+# in length of measure: ie 8th note -> 0.125
+# string 'gg' -> G5 -> 79
+def parse_kern_atom(kern_atom):
+    # first, check for null case
+    if '.' in kern_atom:
+        return (None, None)
+    # split into beginning duration and remaining pitch
+    # discard other data (ie beaming)
+    thisdur = ''
+    thispitch = ''
+    for i in kern_atom:
+        if i in '1234567890': # duration data
+            thisdur += i
+        elif i in 'ABCDEFGabcdefg#-r': # pitch data or rest
+            thispitch += i
+    thisdur = int(thisdur)
+    return (1.0/thisdur, pitch(thispitch))
 
 if __name__=='__main__':
     with open('haydn_test.krn', 'r') as testfile:
