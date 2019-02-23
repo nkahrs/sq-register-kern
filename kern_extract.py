@@ -71,7 +71,7 @@ def pitch(name):
 
 # next: need something for line ([String]) to (Int, [Int]) as in (duration, [notes])
 
-# parse_kern_atom :: String -> (Int, String)
+# parse_kern_atom :: String -> (Float, Int)
 # given something like "8gg", split into the two parts
 # in length of measure: ie 8th note -> 0.125
 # string 'gg' -> G5 -> 79
@@ -91,6 +91,46 @@ def parse_kern_atom(kern_atom):
     thisdur = int(thisdur)
     return (1.0/thisdur, pitch(thispitch))
 
+# parse_kern_line: [String] -> (Float, [Int])
+# input: a list of strings like "8gg" as above
+# output: overall duration of sonority (shortest) and list of pitches
+def parse_kern_line(kern_line):
+    # parse atoms
+    parsed_atoms = [parse_kern_atom(i) for i in kern_line]
+    # find shortest duration
+    durs = [i[0] for i in parsed_atoms]
+    durs = list(filter(lambda i: i != None, durs))
+    if durs:
+        shortestdur = min(durs)
+    else:
+        shortestdur = 0
+    # get pitches
+    pitches = [i[1] for i in parsed_atoms]
+    pitches = list(filter(lambda i: type(i)==int, pitches))
+    return (shortestdur, pitches)
+
+# parse_kern_bars: above generalized to output of stripbars
+# (String, [[String]]) -> (String, [(Float, [Int])])
+# input: output of stripbars
+# output: (key, [(duration, [Pitch])])
+def parse_kern_bars(kern_bars):
+    return (kern_bars[0], [parse_kern_line(i) for i in kern_bars[1]])
+
+# parse_kern_file: generalize above to filename and number of bars
+# String, Int -> (String, [(Float, [Int])])
+# filepath, number of bars -> (key, [(duration, [Pitch])])
+def parse_kern_file(filepath, numbars):
+    with open(filepath, 'r') as thisfile:
+        return parse_kern_bars(stripbars(thisfile, numbars))
+
 if __name__=='__main__':
     with open('haydn_test.krn', 'r') as testfile:
-        print(stripbars(testfile, 1))
+        foo = stripbars(testfile, 3)
+        print(foo)
+        print(parse_kern_bars(foo))
+    print('or generalized:')
+    foo = parse_kern_file('haydn_test.krn', 3)
+    print(foo[0])
+    for i in foo[1]:
+        print(i)
+        
