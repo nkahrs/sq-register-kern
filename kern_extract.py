@@ -1,4 +1,5 @@
 # started 2/20/2019: extract basic info from Kern files into some sort of struct
+# completed 2/24/2019
 
 # we'll use "kern" as a variable name for a kern file
 # we'll assume the type is [String], ie a list of separate lines
@@ -23,7 +24,10 @@ def stripbars(kern, howmany):
                 if line[0][-1] == ':': #encode key
                     key = line[0][1:-1]
             elif line[0][0] == '=': # check bar numbers
-                if '-' not in line[0] and int(line[0][1:]) > howmany:
+                try:
+                    if '-' not in line[0] and int(line[0][1:]) > howmany:
+                        break
+                except: # if a line has more than one ==
                     break
             else: # otherwise just tack on the line
                 toreturn.append(line)
@@ -123,13 +127,15 @@ def parse_kern_file(filepath, numbars):
     with open(filepath, 'r') as thisfile:
         return parse_kern_bars(stripbars(thisfile, numbars))
 
+# note that I've encountered a bug: if stems become non-aligned, it crashes due to trying to parse "=" as note data
+
 if __name__=='__main__':
     with open('haydn_test.krn', 'r') as testfile:
         foo = stripbars(testfile, 3)
         print(foo)
         print(parse_kern_bars(foo))
     print('or generalized:')
-    foo = parse_kern_file('haydn_test.krn', 3)
+    foo = parse_kern_file('haydn_test.krn', 8)
     print(foo[0])
     for i in foo[1]:
         print(i)
