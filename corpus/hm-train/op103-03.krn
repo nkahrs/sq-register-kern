@@ -1,0 +1,52 @@
+!!!COM: Haydn, Franz Joseph
+!!!OTL: Quartet 
+!!!ONM: Opus 103
+!!!OMV: 3
+!!!CDT: 1732/3/31/-1809/5/31/
+!!!OCY: \O3sterreich
+**kern	**kern	**kern	**kern
+*clefC1	*clefC1	*clefC1	*clefC1
+*k[f#c#g#]	*k[f#c#g#]	*k[f#c#g#]	*k[f#c#g#]
+*A:	*A:	*A:	*A:
+*M4/4	*M4/4	*M4/4	*M4/4
+=1	=1	=1	=1
+4ee	4ee	4ee	4ee
+8r	8r	8r	8r
+8cc#	8cc#	8cc#	8cc#
+8dd	8dd	8dd	8dd
+8b	8b	8b	8b
+8a	8a	8a	8a
+8g#	8g#	8g#	8g#
+=2	=2	=2	=2
+4a	4a	4a	4a
+2.r	2.r	2.r	2.r
+=3	=3	=3	=3
+4dd	4dd	4dd	4dd
+8r	8r	8r	8r
+8b	8b	8b	8b
+4cc#	4cc#	4cc#	4cc#
+8r	8r	8r	8r
+8a	8a	8a	8a
+=4	=4	=4	=4
+4b	4b	4b	4b
+2.r	2.r	2.r	2.r
+==	==	==	==
+*-	*-	*-	*-
+!!!RWG: This file only contains pitch and duration data.
+!!!RWG: Transposing instruments are not transposed.
+!!!RWG: Key is interpreted using the Humdrum key tool.
+!!!SCA: 
+!!!YOR: 
+!!!AGN: chamber; string quartet
+!!!AFT: stage1
+!!!ENC: F. Bennion
+!!!END: 1997/04/15
+!!!AST: classical
+!!!YEC: Copyright 1994, Center for Computer Assisted Research in the Humanities
+!!!YEM: Rights to all derivative electronic formats reserved.
+!!!YEM: Refer to licensing agreement for further details.
+!!!YEN: United States of America
+!!!EED: W.B. Hewlett
+!!!KEY: 1525655570
+!!!EMD: Converted from MuseData to Humdrum Jul 29, 1999, by Bret Aarden using muse2kern.
+!!!VTS: 3306294013
