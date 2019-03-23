@@ -68,5 +68,26 @@ plt.figure(3)
 fig3 = plt.bar(thesekeys, [thiscount[i] for i in thesekeys])
 plt.xlabel('type of sonority')
 plt.ylabel('# occurences in corpus')
-plt.show()
 # surprisingly, we get very few actual triads
+
+# another 3/23 addition: scatterplot with controlled dot sizes of duration vs note count
+thiscount = {}
+for i in thedata:
+    thispair = (i[0], len(i[1])) # (duration, # notes)
+    if thispair in thiscount.keys():
+        thiscount[thispair] += 1
+    else:
+        thiscount[thispair] = 1
+
+thiskeys = thiscount.keys()
+durs = [i[0] for i in thiskeys]
+numnotes = [i[1] for i in thiskeys]
+sizes = [thiscount[i] for i in thiskeys]
+
+plt.figure(4)
+fig4 = plt.scatter(durs, numnotes, s = sizes)
+plt.xlabel('duration in whole notes')
+plt.ylabel('# notes in chord')
+
+
+plt.show()
