@@ -16,6 +16,7 @@ for root, dirs, files in os.walk(".\\corpus"):
     for filename in files:
         thisfilepath = root + '\\' + filename
         # print(thisfilepath)
+        # 3/23 change: eliminated one file that had unaligned stems after 8 bars, so no longer have try/except for that
         thisdata = parse_kern_file(thisfilepath, 16)
         # ignore key
         thisdata = thisdata[1]
@@ -44,5 +45,28 @@ fig2 = list_to_bar(allpitches)
 plt.xlabel('pitch (in MIDI value)')
 plt.ylabel('# occurences in corpus')
 
-#show
+# 3/23 addition: plot numbers of major and minor for 3-voice and 4-voice triads
+from major_minor import *
+thiscount = {}
+thesekeys = ['maj3', 'maj4', 'min3', 'min4']
+for i in thesekeys:
+    thiscount[i] = 0
+# manually tabulate the 5 cases (major/minor 3/4-voice, other)
+for i in thedata:
+    i = i[1] # strip duration
+    if len(i) == 3:
+        if ismajor_pset(i):
+            thiscount['maj3'] += 1
+        elif isminor_pset(i):
+            thiscount['min3'] += 1
+    elif len(i) == 4:
+        if ismajor_pset(i):
+            thiscount['maj4'] += 1
+        elif isminor_pset(i):
+            thiscount['min4'] += 1
+plt.figure(3)
+fig3 = plt.bar(thesekeys, [thiscount[i] for i in thesekeys])
+plt.xlabel('type of sonority')
+plt.ylabel('# occurences in corpus')
 plt.show()
+# surprisingly, we get very few actual triads
