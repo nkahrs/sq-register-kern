@@ -16,11 +16,7 @@ for root, dirs, files in os.walk(".\\corpus"):
     for filename in files:
         thisfilepath = root + '\\' + filename
         # print(thisfilepath)
-        try:
-            thisdata = parse_kern_file(thisfilepath, 16)
-        except:
-            print(thisfilepath)
-            thisdata = parse_kern_file(thisfilepath, 8)
+        thisdata = parse_kern_file(thisfilepath, 16)
         # ignore key
         thisdata = thisdata[1]
         # add to main collection
