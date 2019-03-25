@@ -2,9 +2,9 @@
 # this file uses the whole corpus (in the "corpus" folder)
 # and does some basic stats
 
-import os, csv, collections, itertools
-import matplotlib.pyplot as plt
+import os, csv
 from kern_extract import parse_kern_file
+from graphing_utilities import *
 
 # use \\ because this runs on windoze
 
@@ -22,12 +22,6 @@ for root, dirs, files in os.walk(".\\corpus"):
         thisdata = thisdata[1]
         # add to main collection
         thedata += thisdata
-
-# list_to_bar: make a bar plot for distribution from a list:
-def list_to_bar(thelist):
-    counts = collections.Counter(thelist)
-    thekeys = counts.keys()
-    return plt.bar(thekeys, [counts[i] for i in thekeys])
 
 # plot sheer quantities: how many n-chords?
 plt.figure(1)
@@ -71,21 +65,8 @@ plt.ylabel('# occurences in corpus')
 # surprisingly, we get very few actual triads
 
 # another 3/23 addition: scatterplot with controlled dot sizes of duration vs note count
-thiscount = {}
-for i in thedata:
-    thispair = (i[0], len(i[1])) # (duration, # notes)
-    if thispair in thiscount.keys():
-        thiscount[thispair] += 1
-    else:
-        thiscount[thispair] = 1
-
-thiskeys = thiscount.keys()
-durs = [i[0] for i in thiskeys]
-numnotes = [i[1] for i in thiskeys]
-sizes = [thiscount[i] for i in thiskeys]
-
 plt.figure(4)
-fig4 = plt.scatter(durs, numnotes, s = sizes)
+fig4 = sized_scatter([(i[0], len(i[1])) for i in thedata]) # (duration, # notes)
 plt.xlabel('duration in whole notes')
 plt.ylabel('# notes in chord')
 
