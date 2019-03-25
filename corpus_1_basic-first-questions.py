@@ -1,7 +1,7 @@
 # 3/25/2019: why did I let so much time pass? Sixxen piece and grad school visits.
 # This file answers the first basic questions I initially set out to look at.
 
-import os, csv
+import os, csv, statistics
 from kern_extract import parse_kern_file
 from graphing_utilities import *
 
@@ -24,8 +24,8 @@ for root, dirs, files in os.walk(".\\corpus"):
         thedata += thisdata
 
 # sort all of our chords because we're not going to hear weird register changes
-for i in thedata:
-    i.sort()
+# also remove duplicated pitches to avoid weirdness
+thedata = [sorted(list(set(i))) for i in thedata]
 
 # note that thedata :: [[Int]], where Int stands for pitch
 
@@ -46,9 +46,41 @@ plt.xlabel('lowest pitch of trichord')
 plt.ylabel('highest pitch of trichord')
 
 # Figure 3: combined tri and tetrachords
+tritetra = trichords + tetrachords
+
 plt.figure(3)
-sized_scatter([(i[0], i[-1]) for i in (trichords + tetrachords)])
+sized_scatter([(i[0], i[-1]) for i in tritetra])
 plt.xlabel('lowest pitch of pset')
 plt.ylabel('highest pitch of pset')
+
+# Figure 4: normalize y-axis by subtracting y = x
+plt.figure(4)
+sized_scatter([(i[0], (i[-1]-i[0])) for i in tritetra])
+plt.xlabel('lowest pitch of pset')
+plt.ylabel('semitones from lowest to highest pitch of pset')
+
+# Figure 4b: also look at mean based on tri/tetra separately?
+
+# Figure 5: try by highest pitch instead
+plt.figure(5)
+sized_scatter([(i[-1], (i[-1]-i[0])) for i in tritetra])
+plt.xlabel('highest pitch of pset')
+plt.ylabel('semitones from lowest to highest pitch of pset')
+
+# now, want median note spacing.
+
+# first, successive interval array
+def differences(xs):
+    return [t - s for s, t in zip(xs, xs[1:])]
+# median spacing
+def medspacing(xs):
+    return statistics.median(differences(xs))
+
+# Figure 6: what about median note spacing?
+plt.figure(6)
+sized_scatter([(i[0], medspacing(i)) for i in tritetra])
+plt.xlabel('lowest pitch of pset')
+plt.ylabel('median distance between pitches')
+
 
 plt.show()
