@@ -38,12 +38,16 @@ plt.figure(1)
 sized_scatter([(i[0], i[-1]) for i in tetrachords])
 plt.xlabel('lowest pitch of tetrachord')
 plt.ylabel('highest pitch of tetrachord')
+plt.xlim(30, 100)
+plt.ylim(30, 100)
 
 # Figure 2: same thing but for trichords
 plt.figure(2)
 sized_scatter([(i[0], i[-1]) for i in trichords])
 plt.xlabel('lowest pitch of trichord')
 plt.ylabel('highest pitch of trichord')
+plt.xlim(30, 100)
+plt.ylim(30, 100)
 
 # Figure 3: combined tri and tetrachords
 tritetra = trichords + tetrachords
@@ -52,20 +56,35 @@ plt.figure(3)
 sized_scatter([(i[0], i[-1]) for i in tritetra])
 plt.xlabel('lowest pitch of pset')
 plt.ylabel('highest pitch of pset')
+plt.xlim(30, 100)
+plt.ylim(30, 100)
 
 # Figure 4: normalize y-axis by subtracting y = x
 plt.figure(4)
 sized_scatter([(i[0], (i[-1]-i[0])) for i in tritetra])
 plt.xlabel('lowest pitch of pset')
 plt.ylabel('semitones from lowest to highest pitch of pset')
+plt.xlim(30, 100)
+plt.ylim(0, 70)
 
-# Figure 4b: also look at mean based on tri/tetra separately?
-
-# Figure 5: try by highest pitch instead
+# Figure 5: also look at mean based on tri/tetra
 plt.figure(5)
+tri_means = [(i[0], (i[-1]-i[0])/2) for i in trichords]
+tetra_means = [(i[0], (i[-1]-i[0])/3) for i in tetrachords]
+sized_scatter(tri_means + tetra_means)
+plt.xlabel('lowest pitch of pset')
+plt.ylabel('mean spacing between pitches, in semitones')
+plt.xlim(30, 100)
+plt.ylim(0, 35)
+
+
+# Figure 6: try by highest pitch instead
+plt.figure(6)
 sized_scatter([(i[-1], (i[-1]-i[0])) for i in tritetra])
 plt.xlabel('highest pitch of pset')
 plt.ylabel('semitones from lowest to highest pitch of pset')
+plt.xlim(30, 100)
+plt.ylim(0, 70)
 
 # now, want median note spacing.
 
@@ -76,11 +95,13 @@ def differences(xs):
 def medspacing(xs):
     return statistics.median(differences(xs))
 
-# Figure 6: what about median note spacing?
-plt.figure(6)
+# Figure 7: what about median note spacing?
+plt.figure(7)
 sized_scatter([(i[0], medspacing(i)) for i in tritetra])
 plt.xlabel('lowest pitch of pset')
 plt.ylabel('median distance between pitches')
+plt.xlim(30, 100)
+plt.ylim(0, 35)
 
 
 plt.show()
