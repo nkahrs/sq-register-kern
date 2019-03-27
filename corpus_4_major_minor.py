@@ -5,6 +5,7 @@
 import os, csv, statistics
 from kern_extract import parse_kern_file
 from graphing_utilities import *
+from major_minor import *
 
 # use \\ because this runs on windoze
 
@@ -37,53 +38,31 @@ def mtof(midinote):
 # convert all data to frequencies
 #thedata = [[mtof(j) for j in i] for i in thedata]
 
-# get 2--4 note verticalities
-relevant = list(filter(lambda i: len(i) in [2,3,4], thedata))
+# get major and minor 2--4 note verticalities
+major = list(filter(ismajor_pset, thedata))
+minor = list(filter(isminor_pset, thedata))
 
-# and get all the dyads:
-dyads = []
-for j in relevant:
-	dyads += [tuple(j[i:i+2]) for i in range(len(j)-1)]
-
-# and in Hz
-relevantHz = [[mtof(j) for j in i] for i in relevant]
-dyadsHz = []
-for j in relevantHz:
-	dyadsHz += [tuple(j[i:i+2]) for i in range(len(j)-1)]
-
-# Figure 1: lowest vs highest pitch, MIDI
+# Figure 1: scatterplot of lowest pitch vs highest pitch
 plt.figure(1)
-sized_scatter(dyads)
-plt.xlabel('low note (MIDI)')
-plt.ylabel('high note (MIDI)')
+sized_scatter([(i[0], i[-1]) for i in (major + minor)])
+plt.xlabel('lowest pitch of tetrachord (MIDI)')
+plt.ylabel('highest pitch of tetrachord (MIDI)')
 
-# Figure 2: same, Hz
+# Figure 2: normalized
 plt.figure(2)
-sized_scatter(dyadsHz)
-plt.xlabel('low note (Hz)')
-plt.ylabel('high note (Hz)')
+sized_scatter([(i[0], i[-1] - i[0]) for i in (major + minor)])
+plt.xlabel('lowest pitch of tetrachord (MIDI)')
+plt.ylabel('semitone span')
 
-
-# Figures 3--4: normalize y-axis by subtracting y = x
+# Figures 3-4: separate major, minor
 plt.figure(3)
-sized_scatter([(i[0], (i[-1]-i[0])) for i in dyads])
-plt.xlabel('lowest pitch (MIDI)')
-plt.ylabel('size (semitones)')
+sized_scatter([(i[0], i[-1] - i[0]) for i in major])
+plt.xlabel('lowest pitch of tetrachord (MIDI)')
+plt.ylabel('semitone span')
 
 plt.figure(4)
-sized_scatter([(i[0], (i[-1]-i[0])) for i in dyadsHz])
-plt.xlabel('lowest pitch (Hz)')
-plt.ylabel('size (delta Hz)')
-
-# Figures 5--6: by highest pitch instead
-plt.figure(5)
-sized_scatter([(i[1], (i[-1]-i[0])) for i in dyads])
-plt.xlabel('highest pitch (MIDI)')
-plt.ylabel('size (semitones)')
-
-plt.figure(6)
-sized_scatter([(i[1], (i[-1]-i[0])) for i in dyadsHz])
-plt.xlabel('highest pitch (Hz)')
-plt.ylabel('size (delta Hz)')
+sized_scatter([(i[0], i[-1] - i[0]) for i in minor])
+plt.xlabel('lowest pitch of tetrachord (MIDI)')
+plt.ylabel('semitone span')
 
 plt.show()
