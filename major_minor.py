@@ -21,6 +21,10 @@ def isminor(zeroed):
 def is037_zeroed(zeroed):
     return (ismajor(zeroed) or isminor(zeroed))
 
+# also dominant seventh
+def isdom7_zeroed(zeroed):
+    return (sorted(zeroed) in [[0,4,7,10], [0,3,6,8], [0,3,5,9], [0,2,6,9]])
+
 # end-user
 
 def ismajor_pset(pset):
@@ -31,6 +35,9 @@ def isminor_pset(pset):
 
 def is037_pset(pset):
     return is037_zeroed(zerotranspose(pcset(pset)))
+
+def isdom7_pset(pset):
+    return isdom7_zeroed(zerotranspose(pcset(pset)))
 
 # for future steps, depending on how much time I have, it could be interesting
 # to have an actual prime-form calculator, so that I could tabulate prime forms

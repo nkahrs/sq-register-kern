@@ -10,6 +10,8 @@ from graphing_utilities import *
 
 # initialize structure
 thedata = []
+# 3/29 change: also count keys
+thekeys = []
 
 # go over all files
 for root, dirs, files in os.walk(".\\corpus"):  
@@ -18,6 +20,8 @@ for root, dirs, files in os.walk(".\\corpus"):
         # print(thisfilepath)
         # 3/23 change: eliminated one file that had unaligned stems after 8 bars, so no longer have try/except for that
         thisdata = parse_kern_file(thisfilepath, 16)
+        # add key to list of keys
+        thekeys += [thisdata[0]]
         # ignore key
         thisdata = thisdata[1]
         # add to main collection
@@ -42,7 +46,7 @@ plt.ylabel('# occurences in corpus')
 # 3/23 addition: plot numbers of major and minor for 3-voice and 4-voice triads
 from major_minor import *
 thiscount = {}
-thesekeys = ['maj3', 'maj4', 'min3', 'min4']
+thesekeys = ['maj3', 'maj4', 'min3', 'min4', 'dom7']
 for i in thesekeys:
     thiscount[i] = 0
 # manually tabulate the 5 cases (major/minor 3/4-voice, other)
@@ -58,6 +62,8 @@ for i in thedata:
             thiscount['maj4'] += 1
         elif isminor_pset(i):
             thiscount['min4'] += 1
+        elif isdom7_pset(i):
+            thiscount['dom7'] += 1
 plt.figure(3)
 fig3 = plt.bar(thesekeys, [thiscount[i] for i in thesekeys])
 plt.xlabel('type of sonority')
@@ -70,5 +76,11 @@ fig4 = sized_scatter([(i[0], len(i[1])) for i in thedata]) # (duration, # notes)
 plt.xlabel('duration in whole notes')
 plt.ylabel('# notes in chord')
 
+# 3/29: list of keys
+plt.figure(5)
+thekeys.sort()
+list_to_bar(thekeys)
+plt.xlabel('key')
+plt.ylabel('# movements')
 
 plt.show()
