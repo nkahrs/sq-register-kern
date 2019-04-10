@@ -42,35 +42,36 @@ def mtof(midinote):
     return (440 * (2.0**(abovea4/12.0)))
 
 ### Experiment 4a: separate into major/minor/dom7. do lo/hi/span
-##print('Experiment 4a: major/minor')
-##
-### extract M/m/7
-##experiments = [('Major',        list(filter(ismajor_pset, thedata))),
-##               ('Minor',        list(filter(isminor_pset, thedata))),
-##               ('Dominant 7th', list(filter( isdom7_pset, thedata)))
-##               ]
+print('Experiment 4a: major/minor')
 
-##for thisexpt in experiments:
-##    print(thisexpt[0])
-##    for j in [0,1]: # 0 = MIDI, 1 = Hz
-##        if j:
-##            print('Hz')
-##        else:
-##            print('MIDI')
-##        thisdata = thisexpt[1]
-##        if j: # conversion to Hz
-##            thisdata = [[mtof(j) for j in i] for i in thisdata]
-##
-##        lowests = [i[0] for i in thisdata]
-##        highests = [i[-1] for i in thisdata]
-##        ranges = [(i[-1]-i[0]) for i in thisdata]
-##
-##        thecorrs = np.corrcoef([lowests, highests, ranges])
-##        for i in thecorrs:
-##                for j in i:
-##                        print(round(j,2), end='\t')
-##                print()
-##        print('\n')
+# extract M/m/7
+experiments = [('Major',        list(filter(ismajor_pset, thedata))),
+               ('Minor',        list(filter(isminor_pset, thedata))),
+               ('Dominant 7th', list(filter( isdom7_pset, thedata)))
+               ]
+
+for thisexpt in experiments:
+    print(thisexpt[0])
+    thisdata = thisexpt[1]
+    print("N =", len(thisdata))
+    for j in [0,1]: # 0 = MIDI, 1 = Hz
+        if j:
+            print('Hz')
+        else:
+            print('MIDI')
+        if j: # conversion to Hz
+            thisdata = [[mtof(j) for j in i] for i in thisdata]
+
+        lowests = [i[0] for i in thisdata]
+        highests = [i[-1] for i in thisdata]
+        ranges = [(i[-1]-i[0]) for i in thisdata]
+
+        thecorrs = np.corrcoef([lowests, highests, ranges])
+        for i in thecorrs:
+                for j in i:
+                        print(round(j,2), end='\t')
+                print()
+        print('\n')
 
 
 
@@ -100,6 +101,8 @@ for degree in range(7):
         for j in i[1]:
             if (len(j) in [3,4]) and (((j[0] - i[0]) % 12) in heightsizes[degree]):
                 thisdata.append(j)
+
+    print('N =', len(thisdata))
 
     # a hack... comment/uncomment this line because I already copy-pasted data
     # this is for Hz conversion

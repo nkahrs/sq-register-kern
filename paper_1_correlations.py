@@ -48,6 +48,8 @@ for i in [0,1]:
     tetrachords = list(filter(lambda i: len(i)==4, thisdata))
     tritetra = trichords + tetrachords
 
+    print("N =", len(tritetra))
+
     lowests = [i[0] for i in tritetra]
     highests = [i[-1] for i in tritetra]
     means = [statistics.mean(i) for i in tritetra]
@@ -83,6 +85,8 @@ relevantHz = [[mtof(j) for j in i] for i in relevant]
 dyadsHz = []
 for j in relevantHz:
 	dyadsHz += [tuple(j[i:i+2]) for i in range(len(j)-1)]
+
+print('N =', len(dyads))
 
 experimentnames=['Experiment 3a: intervals/MIDI', 'Experiment 3b: intervals/Hz']
 for i in [0,1]:
