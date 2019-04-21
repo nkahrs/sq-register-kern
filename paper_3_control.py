@@ -49,7 +49,7 @@ for i in tetrachords:
 # I now have the probability in each tetrachord voice, though not for the instruments in the whole corpus...
 
 newtetras = []
-for i in range(2000):
+for i in range(20000):
     thistetra = [0,0,0,0]
     for i in range(4):
         thistetra[i] = random.choice(voices[i])
@@ -58,15 +58,17 @@ for i in range(2000):
 for toggle in [0,1]:
     if toggle==0:
         print('MIDI')
+        thisdata = newtetras
     else:
         print('Hz')
-        newtetras = [[mtof(j) for j in i] for i in newtetras]
+        thisdata = [[mtof(j) for j in i] for i in newtetras]
     # lo/hi/span
-    lowests = [i[0] for i in newtetras]
-    highests = [i[-1] for i in newtetras]
-    ranges = [(i[-1]-i[0]) for i in newtetras]
+    lowests = [i[0] for i in thisdata]
+    highests = [i[-1] for i in thisdata]
+    means = [statistics.mean(i) for i in thisdata]
+    ranges = [(i[-1]-i[0]) for i in thisdata]
 
-    thecorrs = np.corrcoef([lowests, highests, ranges])
+    thecorrs = np.corrcoef([lowests, highests, means, ranges])
     for i in thecorrs:
             for j in i:
                     print(round(j,2), end='\t')
@@ -77,4 +79,37 @@ for toggle in [0,1]:
 # scatterplot for fun
 #sized_scatter([(lowests[i], ranges[i]) for i in range(len(lowests))])
 
-plt.show()
+
+# intervals too
+#2--4 note verticalities
+relevant = newtetras
+dyads = []
+for j in relevant:
+	dyads += [tuple(j[i:i+2]) for i in range(len(j)-1)]
+
+relevantHz = [[mtof(j) for j in i] for i in relevant]
+dyadsHz = []
+for j in relevantHz:
+	dyadsHz += [tuple(j[i:i+2]) for i in range(len(j)-1)]
+
+print('N =', len(dyads))
+
+experimentnames=['Experiment 5c: intervals/MIDI', 'Experiment 5d: intervals/Hz']
+for i in [0,1]:
+    if i==0:
+        thisdata = dyads
+    if i==1:
+        thisdata = dyadsHz
+
+    lowests = [i[0] for i in thisdata]
+    highests = [i[-1] for i in thisdata]
+    means = [statistics.mean(i) for i in thisdata]
+    ranges = [(i[-1]-i[0]) for i in thisdata]
+    
+    print(experimentnames[i])
+    thecorrs = np.corrcoef([lowests, highests, means, ranges])
+    for i in thecorrs:
+            for j in i:
+                    print(round(j,2), end='\t')
+            print()
+    print('\n')

@@ -71,7 +71,7 @@ plt.xlim(50, 1800)
 plt.figure(4)
 sized_scatter([(i[0], (i[-1]-i[0])) for i in tritetra])
 plt.xlabel('lowest pitch of pset (Hz)')
-plt.ylabel('semitones from lowest to highest pitch of pset (Hz)')
+plt.ylabel('difference between lowest and highest pitch of pset (Hz)')
 plt.xlim(50, 1800)
 plt.xlim(0, 1750)
 
