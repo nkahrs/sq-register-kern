@@ -10,7 +10,8 @@ def pcset(pset):
 
 # let's separate major and minor
 def zerotranspose(inputset):
-    return [i - inputset[0] for i in inputset] #transpose to 0-based
+    return sorted([i - min(inputset) for i in inputset]) #transpose to 0-based and ordered
+    # 4/22/19 edit: sort set and use min instead of first to get rid of extensive false negatives that were massively skewing results
 
 def ismajor(zeroed):
     return (zeroed in [[0, 4, 7], [0, 3, 8], [0, 5, 9]])

@@ -39,4 +39,29 @@ def sized_scatter(thelist, regression = True):
 
     return plt.scatter(xs, ys, s = sizes)
 
+# like sized_scatter, but a bit more flexibility so we can plot multiple things at once
+# too much copypasta, maybe refactor later
+def sized_scatter_sub(thelist, thiscolor, thislabel, regression = True):
+    thiscount = {} # make dict to count things
+    for i in thelist:
+        if i in thiscount.keys():
+            thiscount[i] += 1
+        else:
+            thiscount[i] = 1
+
+    thiskeys = thiscount.keys()
+    xs = [i[0] for i in thiskeys]
+    ys = [i[1] for i in thiskeys]
+    sizes = [thiscount[i] for i in thiskeys]
+
+    # unless specified otherwise, also run/plot a linear regression
+    if regression:
+        linear = np.polyfit(xs, ys, 1)
+        # print(linear)
+        # plot it, just from min to max values of xs for now
+        theline = np.poly1d(linear)
+        linearxs = [min(xs), max(xs)]
+        plt.plot(linearxs, theline(linearxs), color=thiscolor)
+
+    return plt.scatter(xs, ys, s = sizes, color=thiscolor, label=thislabel, alpha=0.7)
     
