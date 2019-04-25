@@ -66,15 +66,16 @@ from mpl_toolkits.mplot3d import Axes3D
 fig = plt.figure(2)
 ax = fig.add_subplot(111, projection='3d')
 
+
 # want to make a list of (x, y, z), then extract each
 # x = bass, y = span, z = count
 bars = []
 for thisbass in bassnotes:
-    these_chords = filter(lambda i: i[0]==thisbass, tritetra)
+    these_chords = [i for i in tritetra if i[0]==thisbass]
     these_spans = [(i[-1]-i[0]) for i in these_chords]
     spancounts = collections.Counter(these_spans)
     for i in spancounts.keys():
-        bars.append((thisbass, i, spancounts[i]))
+        bars.append((thisbass, i, spancounts[i], spancounts[i]/len(these_chords)))
 
 xs = []
 ys = []
@@ -95,5 +96,30 @@ ax.view_init(30, 315)
 # aggregate histogram
 plt.figure(3)
 list_to_bar([(i[-1]-i[0]) for i in tritetra])
+
+
+# and then 3d chart that's normalized by bass note
+fig = plt.figure(4)
+ax = fig.add_subplot(111, projection='3d')
+
+xs = []
+ys = []
+zs = []
+
+for i in bars:
+    xs.append(i[0])
+    ys.append(i[1])
+    zs.append(i[3])
+    # previously, this read:
+    # / len([j for j in bars if (j[0]==i[0])]))
+    # however, the denominator was too small for some reason
+    # workaround was to calculate the relevant stats earlier, saving an iteration
+
+ax.bar3d(xs, ys, 0, 20, 20, zs)
+ax.set_xlabel('bass note (Hz)')
+ax.set_ylabel('span (Hz)')
+ax.set_zlabel('probability given bass note')
+
+ax.view_init(30, 225)
 
 plt.show()
