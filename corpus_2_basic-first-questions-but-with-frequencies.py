@@ -41,21 +41,21 @@ thedata = [[mtof(j) for j in i] for i in thedata]
 trichords = list(filter(lambda i: len(i)==3, thedata))
 tetrachords = list(filter(lambda i: len(i)==4, thedata))
 
-# Figure 1: scatterplot of lowest pitch versus highest pitch in tetrachords
-plt.figure(1)
-sized_scatter([(i[0], i[-1]) for i in tetrachords])
-plt.xlabel('lowest pitch of tetrachord (Hz)')
-plt.ylabel('highest pitch of tetrachord (Hz)')
-plt.xlim(50, 1800)
-plt.xlim(50, 1800)
-
-# Figure 2: same thing but for trichords
-plt.figure(2)
-sized_scatter([(i[0], i[-1]) for i in trichords])
-plt.xlabel('lowest pitch of trichord (Hz)')
-plt.ylabel('highest pitch of trichord (Hz)')
-plt.xlim(50, 1800)
-plt.xlim(50, 1800)
+### Figure 1: scatterplot of lowest pitch versus highest pitch in tetrachords
+##plt.figure(1)
+##sized_scatter([(i[0], i[-1]) for i in tetrachords])
+##plt.xlabel('lowest pitch of tetrachord (Hz)')
+##plt.ylabel('highest pitch of tetrachord (Hz)')
+##plt.xlim(50, 600)
+##plt.ylim(50, 1800)
+##
+### Figure 2: same thing but for trichords
+##plt.figure(2)
+##sized_scatter([(i[0], i[-1]) for i in trichords])
+##plt.xlabel('lowest pitch of trichord (Hz)')
+##plt.ylabel('highest pitch of trichord (Hz)')
+##plt.xlim(50, 600)
+##plt.ylim(50, 1800)
 
 # Figure 3: combined tri and tetrachords
 tritetra = trichords + tetrachords
@@ -64,16 +64,16 @@ plt.figure(3)
 sized_scatter([(i[0], i[-1]) for i in tritetra])
 plt.xlabel('lowest pitch of pset (Hz)')
 plt.ylabel('highest pitch of pset (Hz)')
-plt.xlim(50, 1800)
-plt.xlim(50, 1800)
+plt.xlim(50, 800)
+#plt.xlim(50, 1800)
 
 # Figure 4: normalize y-axis by subtracting y = x
 plt.figure(4)
 sized_scatter([(i[0], (i[-1]-i[0])) for i in tritetra])
 plt.xlabel('lowest pitch of pset (Hz)')
 plt.ylabel('difference between lowest and highest pitch of pset (Hz)')
-plt.xlim(50, 1800)
-plt.xlim(0, 1750)
+plt.xlim(50, 800)
+#plt.xlim(0, 1750)
 
 # Figure 5: also look at mean based on tri/tetra
 plt.figure(5)
